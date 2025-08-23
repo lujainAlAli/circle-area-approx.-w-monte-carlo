@@ -1,22 +1,38 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.animation as animation 
+from  matplotlib.animation import FuncAnimation
 import math
 
 
-r=20
-h=0
-b=0
-x=np.linspace(-r,r,5)
-y=-np.sqrt(r**2-(x-h)**2)+b
-z=np.sqrt(r**2-(x-h)**2)+b
+radius=10
+
+degrees=360
+limit_adjuster=5
+
+#deg to radians 
+for angle in range(degrees):
+    radians=angle*np.pi/180
+
+radians=np.linspace(0,4*np.pi,num=100)
+xl=radius*np.cos(radians)
+yl=radius*np.sin(radians)
+
+#setting up animation
 fig,axis=plt.subplots()
 
-print(y)
+axis.set_xlim([min(xl)-limit_adjuster,max(xl)+limit_adjuster])
+axis.set_ylim([min(yl)-limit_adjuster,max(yl)+limit_adjuster])
 
-axis.set_xlim([min(x),max(x)])
-axis.set_ylim(int(min(y)),int(max(y)))
+animated_plot,=axis.plot([],[])
+
+def update_circle(frame):
+    animated_plot.set_data(xl[:frame],yl[:frame])
+    return animated_plot 
+
+animation=FuncAnimation(fig=fig,func=update_circle,frames=len(radians),interval=100)
 
 
-axis.plot(x,y,z)
-plt.show()
+ax=plt.gca()
+ax.set_aspect('equal')
+
+
